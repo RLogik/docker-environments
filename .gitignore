@@ -1,0 +1,16 @@
+*
+!/.gitignore
+
+!/justfile
+!/README.md
+!/*.env
+
+!/Dockerfile
+!/docker-compose.yaml
+!/.dockerignore
+
+!/src
+!/src/*.rs
+
+!/docs
+!/docs/*.txt
