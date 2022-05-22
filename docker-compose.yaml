@@ -1,0 +1,48 @@
+version: "3"
+networks:
+  default:
+    driver: bridge
+services:
+  #---------------------------------------------------------#
+  # SERVICE: hello
+  # Use to test that --env-file first.env ignores .env
+  #---------------------------------------------------------#
+  hello:
+    image: app:hello
+    container_name: app_hello
+    env_file: second.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CITY: "${CITY}"
+        WORKDIR: "${WORKDIR}"
+    volumes:
+      - ./docs:${WORKDIR}/docs:rw
+    command:
+      # NOTE: even though in .env, not in --env-file=first.env, so will throw warning:
+      [ "bash", "-c", "echo \"Hiya! I live on ${PLANET}.\"" ]
+  #---------------------------------------------------------#
+  # SERVICE: busy
+  # Use to test priorities of env-files / attributes.
+  #---------------------------------------------------------#
+  busy:
+    image: app:busy
+    container_name: app_busy
+    env_file: second.env
+    environment:
+      TOKEN: "${TOKEN}"
+      COLOUR: "chrome"
+      CONTINENT: "Europe"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CITY: "${CITY}"
+        WORKDIR: "${WORKDIR}"
+    volumes:
+      - ./docs:${WORKDIR}/docs:rw
+    stdin_open: true
+    tty: true
+    command:
+      [ "bash" ]
